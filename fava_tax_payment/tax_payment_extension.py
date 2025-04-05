@@ -2,7 +2,7 @@ from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, g, request
+from flask import jsonify, request
 import json
 import os
 from jinja2 import FileSystemLoader, ChoiceLoader
@@ -112,7 +112,8 @@ class TaxPaymentExtension(FavaExtensionBase):
             return config
         else:
             print(
-                f"Warning: Unsupported type {type(config)} in config, converting to string"
+                f"Warning: Unsupported type {type(config)} in config, \
+                converting to string"
             )
             return str(config)
 
