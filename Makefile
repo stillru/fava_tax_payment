@@ -28,6 +28,7 @@ clean_doc:
 
 # Build HTML documentation
 html: deps
+	touch "$(DOCSBUILDDIR)/.nojekyll"
 	@$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS)
 
 # Build Markdown/Text documentation
