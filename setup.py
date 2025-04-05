@@ -22,4 +22,10 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.10",
+    extras_require={
+    'docs': [
+        'sphinx>=4.0.0',
+        'sphinx-rtd-theme',
+    ],
+},
 )

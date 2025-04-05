@@ -1,0 +1,62 @@
+API Reference
+*************
+
+
+Extension
+=========
+
+class fava_tax_payment.tax_payment_extension.TaxPaymentExtension(*args, **kwargs)
+
+   Bases: "FavaExtensionBase"
+
+   A Fava extension for generating tax payment PDFs and managing tax
+   configurations.
+
+   __init__(*args, **kwargs)
+
+      Initialize the TaxPaymentExtension.
+
+      * Loads or creates the tax configuration file.
+
+      * Sets up the Jinja environment for rendering templates.
+
+      * Loads the PDF template for generating tax payment slips.
+
+   fill_pdf_form(output_path, data)
+
+      Fill a PDF form with the provided data.
+
+      Parameters:
+         * **output_path** (*str*) – The path to save the filled PDF.
+
+         * **data** (*dict*) – The data to populate the PDF form.
+
+   generate_tax_pdfs()
+
+      Generate tax payment PDFs based on the ledger transactions.
+
+      Returns:
+         JSON response with the list of generated files or an error
+         message.
+
+   get_expense_accounts()
+
+      Get a list of expense accounts from the ledger.
+
+      Returns:
+         A list of expense accounts.
+
+      Return type:
+         list
+
+   report_title: str | None = 'Tax Payment PDFs'
+
+      Name for a HTML report for this extension.
+
+   save_config()
+
+      Save the updated tax configuration to the local configuration
+      file.
+
+      Returns:
+         JSON response indicating success or failure.

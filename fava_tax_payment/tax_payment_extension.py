@@ -11,9 +11,19 @@ import importlib.resources as resources
 import shutil
 
 class TaxPaymentExtension(FavaExtensionBase):
+    """
+    A Fava extension for generating tax payment PDFs and managing tax configurations.
+    """
     report_title = "Tax Payment PDFs"
 
     def __init__(self, *args, **kwargs):
+        """
+        Initialize the TaxPaymentExtension.
+
+        - Loads or creates the tax configuration file.
+        - Sets up the Jinja environment for rendering templates.
+        - Loads the PDF template for generating tax payment slips.
+        """
         super().__init__(*args, **kwargs)
         print("Initializing TaxPaymentExtension with args:", args, "kwargs:", kwargs)
         
@@ -82,6 +92,15 @@ class TaxPaymentExtension(FavaExtensionBase):
         self.app = app
 
     def _sanitize_config(self, config):
+        """
+        Sanitize the configuration by converting unsupported types to strings.
+
+        Args:
+            config (dict, list, or other): The configuration to sanitize.
+
+        Returns:
+            The sanitized configuration.
+        """
         if isinstance(config, dict):
             return {k: self._sanitize_config(v) for k, v in config.items()}
         elif isinstance(config, list):
@@ -95,12 +114,23 @@ class TaxPaymentExtension(FavaExtensionBase):
             return str(config)
 
     def get_expense_accounts(self):
-        """Получаем список счетов Expenses из ledger."""
+        """
+        Get a list of expense accounts from the ledger.
+
+        Returns:
+            list: A list of expense accounts.
+        """
         ledger = self.ledger
         return [account for account in ledger.accounts if account.startswith("Expenses:")]
 
     @extension_endpoint("save_config", ["POST"])
     def save_config(self):
+        """
+        Save the updated tax configuration to the local configuration file.
+
+        Returns:
+            JSON response indicating success or failure.
+        """
         try:
             new_config = request.get_json()
             with open(self.local_config_path, "w", encoding="utf-8") as f:
@@ -117,6 +147,12 @@ class TaxPaymentExtension(FavaExtensionBase):
 
     @extension_endpoint("generate_tax_pdfs", ["POST"])
     def generate_tax_pdfs(self):
+        """
+        Generate tax payment PDFs based on the ledger transactions.
+
+        Returns:
+            JSON response with the list of generated files or an error message.
+        """
         try:
             output_files = self._generate_tax_pdfs()
             return jsonify({"status": "success", "files": output_files})
@@ -124,6 +160,12 @@ class TaxPaymentExtension(FavaExtensionBase):
             return jsonify({"status": "error", "message": str(e)}), 500
 
     def _generate_tax_pdfs(self):
+        """
+        Generate tax payment PDFs for transactions in the ledger.
+
+        Returns:
+            list: A list of paths to the generated PDF files.
+        """
         ledger = self.ledger
         extension_dir = os.getcwd()
         output_files = []
@@ -163,6 +205,13 @@ class TaxPaymentExtension(FavaExtensionBase):
         return output_files
 
     def fill_pdf_form(self, output_path, data):
+        """
+        Fill a PDF form with the provided data.
+
+        Args:
+            output_path (str): The path to save the filled PDF.
+            data (dict): The data to populate the PDF form.
+        """
         print(f"Filling PDF: {output_path} with data: {data}")
         reader = PdfReader(self.template_path)
         writer = PdfWriter()

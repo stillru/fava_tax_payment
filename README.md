@@ -12,7 +12,7 @@ A Fava extension that generates PDF tax payment slips directly from your Beancou
 
 ## Planned Features
 
-- [ ] Multilanguag support
+- [ ] Multilanguage support
 - [ ] Improve UI
 
 ## Installation
