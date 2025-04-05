@@ -1,7 +1,8 @@
+from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, g
+from flask import jsonify, g, request
 import json
 import os
 from jinja2 import FileSystemLoader, ChoiceLoader
@@ -21,28 +22,27 @@ class TaxPaymentExtension(FavaExtensionBase):
         print(f"Using directory: {extension_dir}")
 
         config_dir = os.path.join(extension_dir, "config")
-        local_config_path = os.path.join(config_dir, "tax_config.json")
+        self.local_config_path = os.path.join(config_dir, "tax_config.json")
 
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
             print(f"Created config directory: {config_dir}")
         
-        if not os.path.exists(local_config_path):
+        if not os.path.exists(self.local_config_path):
             with resources.path(package, "tax_config.json") as package_config_path:
-                shutil.copy(str(package_config_path), local_config_path)
-            print(f"Copied default tax_config.json to {local_config_path}")
+                shutil.copy(str(package_config_path), self.local_config_path)
+            print(f"Copied default tax_config.json to {self.local_config_path}")
         else:
-            print(f"Using existing tax_config.json at {local_config_path}")
+            print(f"Using existing tax_config.json at {self.local_config_path}")
 
         try:
-            with open(local_config_path, "r", encoding="utf-8") as f:
-                config = json.load(f)
+            with open(self.local_config_path, "r", encoding="utf-8") as f:
+                self.tax_config = json.load(f)
             print("Loaded tax_config.json successfully")
         except Exception as e:
             print(f"Error loading tax_config.json: {e}")
             raise
 
-        # Доступ к template.pdf из пакета
         try:
             with resources.path(package, "template.pdf") as template_path:
                 self.template_path = str(template_path)
@@ -66,14 +66,48 @@ class TaxPaymentExtension(FavaExtensionBase):
             print(f"Error setting Jinja template directory: {e}")
             raise
         
-        self.payer_name = config["payer"]["name"]
-        self.payer_account = config["payer"]["account"]
-        self.expense_category = config["expense_category"]
-        self.tax_configs = config["taxes"]
-        self.template_path = template_path
+        self.payer_name = self.tax_config["payer"]["name"]
+        self.payer_account = self.tax_config["payer"]["account"]
+        self.expense_category = self.tax_config["expense_category"]
+        self.tax_configs = self.tax_config["taxes"]
         self.app = app
 
-    @extension_endpoint("generate_tax_pdfs", ["POST"])  # Define endpoint name and methods
+    def _sanitize_config(self, config):
+        """Преобразуем данные в сериализуемый формат."""
+        if isinstance(config, dict):
+            return {k: self._sanitize_config(v) for k, v in config.items()}
+        elif isinstance(config, list):
+            return [self._sanitize_config(item) for item in config]
+        elif isinstance(config, Decimal):
+            return float(config)
+        elif isinstance(config, (str, int, float, bool)) or config is None:
+            return config
+        else:
+            print(f"Warning: Unsupported type {type(config)} in config, converting to string")
+            return str(config)
+
+    def render(self):
+        """Передаём очищенный tax_config в шаблон."""
+        sanitized_config = self._sanitize_config(self.tax_config)
+        return self.jinja_env.get_template("TaxPaymentExtension.html").render(tax_config=sanitized_config)
+
+    @extension_endpoint("save_config", ["POST"])
+    def save_config(self):
+        try:
+            new_config = request.get_json()
+            with open(self.local_config_path, "w", encoding="utf-8") as f:
+                json.dump(new_config, f, indent=2, ensure_ascii=False)
+            self.tax_config = new_config
+            self.payer_name = new_config["payer"]["name"]
+            self.payer_account = new_config["payer"]["account"]
+            self.expense_category = new_config["expense_category"]
+            self.tax_configs = new_config["taxes"]
+            print(f"Saved updated config to {self.local_config_path}")
+            return jsonify({"status": "success", "message": "Configuration saved"})
+        except Exception as e:
+            return jsonify({"status": "error", "message": str(e)}), 500
+
+    @extension_endpoint("generate_tax_pdfs", ["POST"])
     def generate_tax_pdfs(self):
         try:
             output_files = self._generate_tax_pdfs()
