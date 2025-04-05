@@ -1,10 +1,18 @@
 {% extends "_layout.html" %}
 {% block title %}Tax Payment PDFs{% endblock %}
 {% block content %}
-  <h1>Generate Tax Payment PDFs</h1>
+  <h1>Tax Payment PDFs</h1>
+  
+  <h2>Generate PDFs</h2>
   <p>Click the button below to generate PDF payment slips for tax transactions.</p>
   <button id="generate-pdfs">Generate PDFs</button>
   <div id="result"></div>
+
+  <h2>Edit Configuration</h2>
+  <textarea id="config-editor" rows="20" cols="80">{{ extension.tax_config | tojson(indent=2)  }}</textarea>
+  <br>
+  <button id="save-config">Save Configuration</button>
+  <div id="config-result"></div>
 
   <script>
     document.getElementById("generate-pdfs").addEventListener("click", () => {
@@ -19,6 +27,33 @@
         })
         .catch(error => {
           document.getElementById("result").innerHTML = "Error: " + error;
+        });
+    });
+
+    document.getElementById("save-config").addEventListener("click", () => {
+      const configText = document.getElementById("config-editor").value;
+      let config;
+      try {
+        config = JSON.parse(configText);
+      } catch (e) {
+        document.getElementById("config-result").innerHTML = "Error: Invalid JSON - " + e.message;
+        return;
+      }
+      fetch("./save_config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config)
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            document.getElementById("config-result").innerHTML = "Configuration saved successfully!";
+          } else {
+            document.getElementById("config-result").innerHTML = "Error: " + data.message;
+          }
+        })
+        .catch(error => {
+          document.getElementById("config-result").innerHTML = "Error: " + error;
         });
     });
   </script>
