@@ -7,10 +7,12 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = docsource
 DOCSBUILDDIR  = docs
 BUILDDIR      = .
+FINANCE_DIR  = $(shell pwd)/..
+
 
 .PHONY: help clean html
 
-all: clean html md build
+all: clean build html md 
 
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS) $(SPHINXBUILDARGS)
@@ -29,6 +31,7 @@ clean:
 
 build: clean
 	python3 setup.py bdist_wheel
+	python3 setup.py install --user
 	docker build -t fava-tax-payment .
 
 run:
