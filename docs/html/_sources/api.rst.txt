@@ -1,0 +1,10 @@
+API Reference
+=============
+
+Extension
+---------
+
+.. automodule:: fava_tax_payment.tax_payment_extension
+   :members:
+   :undoc-members:
+   :show-inheritance:

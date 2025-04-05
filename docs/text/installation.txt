@@ -1,0 +1,24 @@
+Installation
+************
+
+
+Installing the Package
+======================
+
+The extension can be installed from PyPI:
+
+   pip install fava-tax-payment
+
+For development installation:
+
+   git clone https://github.com/stillru/fava-tax-payment.git
+   cd fava-tax-payment
+   pip install -e .
+
+
+Enabling the Extension
+======================
+
+Add the extension to your Beancount file:
+
+   plugin "fava.plugins.extension" "fava_tax_payment.tax_payment_extension.TaxPaymentExtension"

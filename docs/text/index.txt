@@ -1,0 +1,40 @@
+Welcome to Fava Tax Payment Extension’s documentation!
+******************************************************
+
+
+Contents:
+^^^^^^^^^
+
+* Installation
+
+  * Installing the Package
+
+  * Enabling the Extension
+
+* Usage
+
+  * Tagging Transactions
+
+  * Generating PDFs
+
+* Configuration
+
+  * Tax Configuration
+
+  * Configuration Format
+
+  * Web Configuration UI
+
+* API Reference
+
+  * Extension
+
+
+Indices and tables
+******************
+
+* Index
+
+* Module Index
+
+* Search Page
