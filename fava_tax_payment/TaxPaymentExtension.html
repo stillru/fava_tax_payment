@@ -1,0 +1,25 @@
+{% extends "_layout.html" %}
+{% block title %}Tax Payment PDFs{% endblock %}
+{% block content %}
+  <h1>Generate Tax Payment PDFs</h1>
+  <p>Click the button below to generate PDF payment slips for tax transactions.</p>
+  <button id="generate-pdfs">Generate PDFs</button>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById("generate-pdfs").addEventListener("click", () => {
+      fetch("./generate_tax_pdfs", { method: "POST" })
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === "success") {
+            document.getElementById("result").innerHTML = "Generated: " + data.files.join(", ");
+          } else {
+            document.getElementById("result").innerHTML = "Error: " + data.message;
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").innerHTML = "Error: " + error;
+        });
+    });
+  </script>
+{% endblock %}
