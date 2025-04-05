@@ -10,10 +10,60 @@ A Fava extension that generates PDF tax payment slips directly from your Beancou
 - Simple web UI integration with Fava
 - Automatically fills official payment form templates
 
-## Planned Features
+## Planned Features and Improvements
 
-- [ ] Multilanguage support
-- [ ] Improve UI
+The following features and improvements are planned for future releases of the Tax Payment Extension:
+
+### Code Improvements
+1. **Improve `self.app` Handling**
+   - Ensure the Flask app instance is accessed correctly in the Fava extension context.
+
+2. **Error Handling in Configuration Loading**
+   - Validate the structure of `tax_config.json` after loading to ensure all required keys are present.
+
+3. **Dynamic Path Handling**
+   - Replace hardcoded paths (e.g., `template.pdf`, `TaxPaymentExtension.html`) with dynamic, package-relative paths.
+
+4. **Jinja2 Loader Compatibility**
+   - Ensure compatibility when modifying the Jinja2 loader, especially when it is not a `ChoiceLoader`.
+
+5. **Error Handling in PDF Generation**
+   - Add validation for `tax_data` to prevent `KeyError` during PDF generation.
+
+6. **Error Logging**
+   - Replace `print` statements with a proper logging framework for better error tracking in production.
+
+7. **Dependency Validation**
+   - Add checks to ensure required libraries (e.g., `PyPDF2`, `Flask`) are installed and compatible.
+
+### Security Enhancements
+8. **Sanitize User Input**
+   - Validate and sanitize user-provided configuration data before saving it to prevent potential security risks.
+
+### UI and UX Improvements
+9. **Improve JavaScript Error Handling**
+   - Enhance error handling in JavaScript to provide user-friendly messages and better debugging information.
+
+10. **Responsive UI**
+    - Test and improve the responsiveness of the HTML form for smaller screens using CSS media queries.
+
+11. **Multilanguage Support**
+    - Add support for multiple languages in the UI and error messages.
+
+### Maintainability
+12. **Move CSS and JavaScript to Separate Files**
+    - Extract inline CSS and JavaScript into separate files for better maintainability and reusability.
+
+13. **Remove Unused Code**
+    - Review and remove unused imports or redundant logic in Python and JavaScript files.
+
+14. **Hardcoded Strings in PDF Form Filling**
+    - Replace hardcoded field names in the `fill_pdf_form` method with configurable constants.
+
+### Testing
+15. **Add Unit Tests**
+    - Implement unit tests for critical methods like `_generate_tax_pdfs`, `save_config`, and `fill_pdf_form` to ensure reliability.
+
 
 ## Installation
 
