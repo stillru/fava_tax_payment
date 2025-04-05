@@ -10,6 +10,8 @@ BUILDDIR      = .
 
 .PHONY: help clean html
 
+all: clean html md build
+
 help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS) $(SPHINXBUILDARGS)
 

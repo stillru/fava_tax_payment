@@ -49,12 +49,12 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-fava_tax_payment.tax_payment_extension">Extension</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.__init__"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.__init__()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.fill_pdf_form()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.generate_tax_pdfs()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.get_expense_accounts"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.get_expense_accounts()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.report_title"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.report_title</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.__init__"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.get_expense_accounts"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.get_expense_accounts()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.save_config"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.save_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.generate_tax_pdfs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.fill_pdf_form()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -96,6 +96,12 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fava_tax_payment.tax_payment_extension.</span></span><span class="sig-name descname"><span class="pre">TaxPaymentExtension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">FavaExtensionBase</span></code></p>
 <p>A Fava extension for generating tax payment PDFs and managing tax configurations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.report_title">
+<span class="sig-name descname"><span class="pre">report_title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tax</span> <span class="pre">Payment</span> <span class="pre">PDFs'</span></em><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.report_title" title="Link to this definition"></a></dt>
+<dd><p>Name for a HTML report for this extension.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.__init__" title="Link to this definition"></a></dt>
@@ -105,31 +111,6 @@
 <li><p>Sets up the Jinja environment for rendering templates.</p></li>
 <li><p>Loads the PDF template for generating tax payment slips.</p></li>
 </ul>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form">
-<span class="sig-name descname"><span class="pre">fill_pdf_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.fill_pdf_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form" title="Link to this definition"></a></dt>
-<dd><p>Fill a PDF form with the provided data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to save the filled PDF.</p></li>
-<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – The data to populate the PDF form.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs">
-<span class="sig-name descname"><span class="pre">generate_tax_pdfs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.generate_tax_pdfs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs" title="Link to this definition"></a></dt>
-<dd><p>Generate tax payment PDFs based on the ledger transactions.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>JSON response with the list of generated files or an error message.</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -146,12 +127,6 @@
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.report_title">
-<span class="sig-name descname"><span class="pre">report_title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Tax</span> <span class="pre">Payment</span> <span class="pre">PDFs'</span></em><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.report_title" title="Link to this definition"></a></dt>
-<dd><p>Name for a HTML report for this extension.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.save_config">
 <span class="sig-name descname"><span class="pre">save_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.save_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.save_config" title="Link to this definition"></a></dt>
@@ -159,6 +134,31 @@
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>JSON response indicating success or failure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs">
+<span class="sig-name descname"><span class="pre">generate_tax_pdfs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.generate_tax_pdfs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.generate_tax_pdfs" title="Link to this definition"></a></dt>
+<dd><p>Generate tax payment PDFs based on the ledger transactions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSON response with the list of generated files or an error message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form">
+<span class="sig-name descname"><span class="pre">fill_pdf_form</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.fill_pdf_form"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.tax_payment_extension.TaxPaymentExtension.fill_pdf_form" title="Link to this definition"></a></dt>
+<dd><p>Fill a PDF form with the provided data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to save the filled PDF.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – The data to populate the PDF form.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

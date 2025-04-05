@@ -1,8 +1,8 @@
 Installation
-===========
+============
 
 Installing the Package
---------------------
+----------------------
 
 The extension can be installed from PyPI:
 
@@ -19,7 +19,7 @@ For development installation:
    pip install -e .
 
 Enabling the Extension
---------------------
+----------------------
 
 Add the extension to your Beancount file:
 

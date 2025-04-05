@@ -1,5 +1,8 @@
+**/__pycache__
 Dockerfile
 *.org
 build
 dist
 *.egg-info
+Utils
+docsource

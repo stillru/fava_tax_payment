@@ -1,15 +1,15 @@
 Configuration
-============
+=============
 
 Tax Configuration
---------------
+-----------------
 
 The extension creates a ``config/tax_config.json`` file in your working directory on first run.
 You can customize this file with your payment details either by directly editing it or using
 the web UI provided in the Fava interface.
 
 Configuration Format
-----------------
+--------------------
 
 .. code-block:: json
 
@@ -32,7 +32,7 @@ Configuration Format
    }
 
 Web Configuration UI
------------------
+--------------------
 
 The extension provides a web-based configuration interface within Fava. To use it:
 
