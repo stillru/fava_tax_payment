@@ -20,7 +20,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         package = "fava_tax_payment"
         extension_dir = os.getcwd()
         print(f"Using directory: {extension_dir}")
-
+        self.expense_accounts = self.get_expense_accounts()
         config_dir = os.path.join(extension_dir, "config")
         self.local_config_path = os.path.join(config_dir, "tax_config.json")
 
@@ -38,10 +38,19 @@ class TaxPaymentExtension(FavaExtensionBase):
         try:
             with open(self.local_config_path, "r", encoding="utf-8") as f:
                 self.tax_config = json.load(f)
-            print("Loaded tax_config.json successfully")
+            print("Loaded tax_config.json successfully:", self.tax_config)
         except Exception as e:
             print(f"Error loading tax_config.json: {e}")
             raise
+
+        if not isinstance(self.tax_config, dict):
+            self.tax_config = {}
+        if "payer" not in self.tax_config:
+            self.tax_config["payer"] = {"name": "Default Payer", "account": "000000000"}
+        if "expense_category" not in self.tax_config:
+            self.tax_config["expense_category"] = "Expenses:Taxes"
+        if "taxes" not in self.tax_config:
+            self.tax_config["taxes"] = {}
 
         try:
             with resources.path(package, "template.pdf") as template_path:
@@ -73,7 +82,6 @@ class TaxPaymentExtension(FavaExtensionBase):
         self.app = app
 
     def _sanitize_config(self, config):
-        """Преобразуем данные в сериализуемый формат."""
         if isinstance(config, dict):
             return {k: self._sanitize_config(v) for k, v in config.items()}
         elif isinstance(config, list):
@@ -86,10 +94,10 @@ class TaxPaymentExtension(FavaExtensionBase):
             print(f"Warning: Unsupported type {type(config)} in config, converting to string")
             return str(config)
 
-    def render(self):
-        """Передаём очищенный tax_config в шаблон."""
-        sanitized_config = self._sanitize_config(self.tax_config)
-        return self.jinja_env.get_template("TaxPaymentExtension.html").render(tax_config=sanitized_config)
+    def get_expense_accounts(self):
+        """Получаем список счетов Expenses из ledger."""
+        ledger = self.ledger
+        return [account for account in ledger.accounts if account.startswith("Expenses:")]
 
     @extension_endpoint("save_config", ["POST"])
     def save_config(self):

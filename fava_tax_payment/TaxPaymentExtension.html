@@ -9,10 +9,151 @@
   <div id="result"></div>
 
   <h2>Edit Configuration</h2>
-  <textarea id="config-editor" rows="20" cols="80">{{ extension.tax_config | tojson(indent=2)  }}</textarea>
-  <br>
-  <button id="save-config">Save Configuration</button>
+  <form id="config-form">
+    <div class="form-section">
+      <h3>Payer</h3>
+      <div class="flex-row">
+        <div class="input-field">
+          <label for="payer-name">Name:</label>
+          <input type="text" id="payer-name" name="payer_name" value="{{ extension.tax_config.payer.name }}">
+        </div>
+        <div class="input-field">
+          <label for="payer-account">Account:</label>
+          <input type="text" id="payer-account" name="payer_account" value="{{ extension.tax_config.payer.account }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Expense Category</h3>
+      <div class="flex-row">
+        <div class="input-field">
+          <label for="expense-category">Category:</label>
+          <select id="expense-category" name="expense_category">
+            {% for account in extension.expense_accounts %}
+              <option value="{{ account }}" {% if account == extension.tax_config.expense_category %}selected{% endif %}>
+                {{ account }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Taxes</h3>
+      <div id="taxes-container">
+        {% for tax_name, tax_data in extension.tax_config.taxes.items() %}
+          <div class="tax-entry" data-tax-name="{{ tax_name }}">
+            <div class="flex-row">
+              <div class="input-field">
+                <label>Tax Slug:</label>
+                <input type="text" name="tax_name" value="{{ tax_name }}" class="tax-name">
+              </div>
+              <div class="input-field">
+                <label>Purpose:</label>
+                <input type="text" name="purpose" value="{{ tax_data.purpose }}">
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="input-field">
+                <label>Payment Code:</label>
+                <input type="text" name="payment_code" value="{{ tax_data.payment_code }}">
+              </div>
+              <div class="input-field">
+                <label>Recipient:</label>
+                <input type="text" name="recipient" value="{{ tax_data.recipient }}">
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="input-field">
+                <label>Recipient Account:</label>
+                <input type="text" name="recipient_account" value="{{ tax_data.recipient_account }}">
+              </div>
+              <div class="input-field">
+                <label>Model:</label>
+                <input type="text" name="model" value="{{ tax_data.model }}">
+              </div>
+              <div class="input-field">
+                <label>Reference Number:</label>
+                <input type="text" name="reference_number" value="{{ tax_data.reference_number }}">
+              </div>
+            </div>
+            <div class="flex-row">
+              <button type="button" class="remove-tax">Remove Tax</button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <button type="button" id="add-tax">Add New Tax</button>
+    </div>
+
+    <div class="form-section">
+      <button type="submit" id="save-config">Save Configuration</button>
+    </div>
+  </form>
   <div id="config-result"></div>
+
+  <style>
+    .form-section {
+      margin-bottom: 1.5rem;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      align-items: center;
+    }
+    .input-field {
+      flex: 1;
+      min-width: 120px;
+      max-width: 100%;
+    }
+    .input-field label {
+      display: block;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+    .input-field input,
+    .input-field select {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid var(--border-darker);
+      background-color: var(--background);
+      color: var(--text-color);
+    }
+    .tax-entry {
+      border: 1px solid var(--border);
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      background-color: var(--background-darker);
+      max-width: 100%;
+    }
+    button {
+      padding: 0.5em 0.75em;
+      background-color: var(--button-background);
+      color: var(--button-color);
+      border: none;
+      cursor: pointer;
+      transition: filter 0.2s ease-out;
+    }
+    button:hover {
+      filter: brightness(90%);
+    }
+    .remove-tax {
+      background-color: var(--error);
+    }
+    /* Адаптивность */
+    @media (max-width: 767px) {
+      .input-field {
+        min-width: 100%;
+      }
+      .tax-entry {
+        padding: 0.25rem;
+      }
+    }
+  </style>
 
   <script>
     document.getElementById("generate-pdfs").addEventListener("click", () => {
@@ -30,15 +171,89 @@
         });
     });
 
-    document.getElementById("save-config").addEventListener("click", () => {
-      const configText = document.getElementById("config-editor").value;
-      let config;
-      try {
-        config = JSON.parse(configText);
-      } catch (e) {
-        document.getElementById("config-result").innerHTML = "Error: Invalid JSON - " + e.message;
-        return;
-      }
+    document.getElementById("add-tax").addEventListener("click", () => {
+      const container = document.getElementById("taxes-container");
+      const newTaxDiv = document.createElement("div");
+      newTaxDiv.className = "tax-entry";
+      newTaxDiv.innerHTML = `
+        <div class="flex-row">
+          <div class="input-field">
+            <label>Tax Slug:</label>
+            <input type="text" name="tax_name" value="new_tax">
+          </div>
+          <div class="input-field">
+            <label>Purpose:</label>
+            <input type="text" name="purpose" value="">
+          </div>
+        </div>
+        <div class="flex-row">
+          <div class="input-field">
+            <label>Payment Code:</label>
+            <input type="text" name="payment_code" value="">
+          </div>
+          <div class="input-field">
+            <label>Recipient:</label>
+            <input type="text" name="recipient" value="">
+          </div>
+        </div>
+        <div class="flex-row">
+          <div class="input-field">
+            <label>Recipient Account:</label>
+            <input type="text" name="recipient_account" value="">
+          </div>
+          <div class="input-field">
+            <label>Model:</label>
+            <input type="text" name="model" value="">
+          </div>
+          <div class="input-field">
+            <label>Reference Number:</label>
+            <input type="text" name="reference_number" value="">
+          </div>
+        </div>
+        <div class="flex-row">
+          <button type="button" class="remove-tax">Remove Tax</button>
+        </div>
+      `;
+      container.appendChild(newTaxDiv);
+      addRemoveListeners();
+    });
+
+    function addRemoveListeners() {
+      document.querySelectorAll(".remove-tax").forEach(button => {
+        button.removeEventListener("click", removeTaxHandler);
+        button.addEventListener("click", removeTaxHandler);
+      });
+    }
+
+    function removeTaxHandler(event) {
+      event.target.closest(".tax-entry").remove();
+    }
+
+    addRemoveListeners();
+
+    document.getElementById("config-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const config = {
+        payer: {
+          name: document.getElementById("payer-name").value,
+          account: document.getElementById("payer-account").value
+        },
+        expense_category: document.getElementById("expense-category").value,
+        taxes: {}
+      };
+
+      document.querySelectorAll(".tax-entry").forEach(taxEntry => {
+        const taxName = taxEntry.querySelector("input[name='tax_name']").value;
+        config.taxes[taxName] = {
+          purpose: taxEntry.querySelector("input[name='purpose']").value,
+          recipient: taxEntry.querySelector("input[name='recipient']").value,
+          payment_code: taxEntry.querySelector("input[name='payment_code']").value,
+          recipient_account: taxEntry.querySelector("input[name='recipient_account']").value,
+          model: taxEntry.querySelector("input[name='model']").value,
+          reference_number: taxEntry.querySelector("input[name='reference_number']").value
+        };
+      });
+
       fetch("./save_config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
