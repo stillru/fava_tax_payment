@@ -1,0 +1,3 @@
+include fava_tax_payment/tax_config.json
+include fava_tax_payment/template.pdf
+include fava_tax_payment/TaxPaymentExtension.html
