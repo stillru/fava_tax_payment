@@ -1,7 +1,7 @@
 Fava Tax Payment Extension
 **************************
 
-Version: 0.1.0
+Version: 0.1.1
 
 A Fava extension that generates PDF tax payment slips directly from
 your Beancount transactions.

@@ -5,8 +5,8 @@ RUN pip install fava>=1.30.2
 
 WORKDIR /app
 
-COPY dist/fava_tax_payment-0.1.0-py3-none-any.whl .
-RUN pip install fava_tax_payment-0.1.0-py3-none-any.whl
+COPY dist/fava_tax_payment-*-py3-none-any.whl .
+RUN pip install fava_tax_payment-*-py3-none-any.whl
 
 COPY year2025.org .
 
