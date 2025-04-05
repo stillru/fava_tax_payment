@@ -1,23 +1,19 @@
 Configuration
-*************
-
-The extension allows you to customize tax payment details through a
-web UI.
-
-
-Initial Setup
 =============
 
+The extension allows you to customize tax payment details through a web UI.
+
+Initial Setup
+-------------
+
 1. Open Fava and navigate to the "Tax Payment PDFs" extension page.
-
 2. Configure the payer details (name, account) and expense category.
-
-3. Add tax types with their respective payment codes, recipients, and
-   templates.
-
+3. Add tax types with their respective payment codes, recipients, and templates.
 
 Example Configuration
-=====================
+---------------------
+
+.. code-block:: json
 
    {
        "payer": {
@@ -37,8 +33,7 @@ Example Configuration
        }
    }
 
-
 Saving Changes
-==============
+--------------
 
 Click "Save Configuration" to store your settings.

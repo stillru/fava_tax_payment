@@ -1,43 +1,22 @@
-API Reference
-*************
+API
+***
+
+The extension exposes a simple API for advanced users or developers.
 
 
-Extension
-=========
+Modules
+=======
 
-class fava_tax_payment.tax_payment_extension.TaxPaymentExtension(*args, **kwargs)
+class fava_tax_payment.TaxPaymentExtension(*args, **kwargs)
 
    Bases: "FavaExtensionBase"
 
    A Fava extension for generating tax payment PDFs and managing tax
    configurations.
 
-   __init__(*args, **kwargs)
+   report_title: str | None = 'Tax Payment PDFs'
 
-      Initialize the TaxPaymentExtension.
-
-      * Loads or creates the tax configuration file.
-
-      * Sets up the Jinja environment for rendering templates.
-
-      * Loads the PDF template for generating tax payment slips.
-
-   fill_pdf_form(output_path, data)
-
-      Fill a PDF form with the provided data.
-
-      Parameters:
-         * **output_path** (*str*) – The path to save the filled PDF.
-
-         * **data** (*dict*) – The data to populate the PDF form.
-
-   generate_tax_pdfs()
-
-      Generate tax payment PDFs based on the ledger transactions.
-
-      Returns:
-         JSON response with the list of generated files or an error
-         message.
+      Name for a HTML report for this extension.
 
    get_expense_accounts()
 
@@ -49,10 +28,6 @@ class fava_tax_payment.tax_payment_extension.TaxPaymentExtension(*args, **kwargs
       Return type:
          list
 
-   report_title: str | None = 'Tax Payment PDFs'
-
-      Name for a HTML report for this extension.
-
    save_config()
 
       Save the updated tax configuration to the local configuration
@@ -60,3 +35,48 @@ class fava_tax_payment.tax_payment_extension.TaxPaymentExtension(*args, **kwargs
 
       Returns:
          JSON response indicating success or failure.
+
+   generate_tax_pdfs()
+
+      Generate tax payment PDFs based on the ledger transactions.
+
+      Returns:
+         JSON response with the list of generated files or an error
+         message.
+
+   fill_pdf_form(output_path, data)
+
+      Fill a PDF form with the provided data.
+
+      Parameters:
+         * **output_path** (*str*) -- The path to save the filled PDF.
+
+         * **data** (*dict*) -- The data to populate the PDF form.
+
+
+Endpoints
+=========
+
+* **GET /extension/TaxPaymentExtension/**: Displays the configuration
+  and generation UI.
+
+* **POST /extension/TaxPaymentExtension/generate_tax_pdfs**: Generates
+  PDFs for tagged transactions.
+
+* **POST /extension/TaxPaymentExtension/save_config**: Saves the
+  configuration JSON.
+
+
+Example Request
+===============
+
+   curl -X POST -H "Content-Type: application/json" \
+        -d '{"payer": {"name": "John Doe"}}' \
+        http://localhost:5000/extension/TaxPaymentExtension/save_config
+
+
+Development
+===========
+
+The extension is built with Flask and integrates with Fava's extension
+system. Contributions are welcome — see the GitHub repo for details.

@@ -1,0 +1,33 @@
+.. Fava Tax Payment Extension documentation master file
+
+Fava Tax Payment Extension
+==========================
+
+Version: |release|
+
+A Fava extension that generates PDF tax payment slips directly from your Beancount transactions.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   installation
+   configuration
+   usage
+   api
+
+Features
+--------
+
+- Generates PDF tax payment slips from tagged Beancount transactions
+- Supports multiple tax types (income, healthcare, fixed fees, etc.)
+- Customizable payment details through configuration
+- Simple web UI integration with Fava
+- Automatically fills official payment form templates
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`

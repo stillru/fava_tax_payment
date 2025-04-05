@@ -1,43 +1,54 @@
-# Minimal makefile for Sphinx documentation
+# Minimal Makefile for Sphinx documentation and project build
 
-# You can set these variables from the command line, and also
-# from the environment for the first two.
+# Variables (overridable from command line or environment)
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = docsource
 DOCSBUILDDIR  = docs
 BUILDDIR      = .
-FINANCE_DIR  = $(shell pwd)/..
+FINANCE_DIR   = $(shell pwd)/..
 
+.PHONY: help clean clean_doc html md build run run-custom deps
 
-.PHONY: help clean html
+# Default target
+all: clean clean_doc build html md
 
-all: clean build html md 
-
+# Help
 help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS) $(SPHINXBUILDARGS)
+	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS)
 
+# Install dependencies
+deps:
+	pip install -r requirements.txt
+	pip install sphinx sphinx-rtd-theme beancount
+
+# Clean documentation directory
 clean_doc:
-	rm -rfv $(BUILDDIR)/*
+	rm -rf $(DOCSBUILDDIR)/*
 
-html:
-	@$(SPHINXBUILD) -M html "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS) $(SPHINXBUILDARGS)
+# Build HTML documentation
+html: deps
+	@$(SPHINXBUILD) -b html "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS)
 
-md:
-	@$(SPHINXBUILD) -M text "$(SOURCEDIR)" "$(DOCSBUILDDIR)" $(SPHINXOPTS) $(SPHINXBUILDARGS)
+# Build Markdown/Text documentation
+md: deps
+	@$(SPHINXBUILD) -b text "$(SOURCEDIR)" "$(DOCSBUILDDIR)/text" $(SPHINXOPTS)
 
+# Clean build artifacts
 clean:
-	rm -rfv $(BUILDDIR)/dist $(BUILDDIR)/build $(BUILDDIR)/*.egg-info/
+	rm -rf $(BUILDDIR)/dist $(BUILDDIR)/build $(BUILDDIR)/*.egg-info/
 
-build: clean
+# Build and install package, then build Docker image
+build: clean deps
 	python3 setup.py bdist_wheel
-	python3 setup.py install --user
+	pip install --force-reinstall dist/*.whl  # Устанавливаем в текущее окружение
 	docker build -t fava-tax-payment .
 
+# Run Docker container with default finance directory
 run:
 	docker run -p 5000:5000 -v $(FINANCE_DIR):/app fava-tax-payment
 
-# Allow overriding the finance directory path
+# Run Docker container with custom finance directory
 run-custom:
 	@read -p "Enter path to finance directory: " dir; \
 	docker run -p 5000:5000 -v $$dir:/app fava-tax-payment

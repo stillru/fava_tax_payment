@@ -1,26 +1,26 @@
 Installation
-************
+============
 
 To install the Fava Tax Payment Extension, follow these steps:
 
 1. Ensure you have Fava installed and running.
-
 2. Install the extension via pip:
+
+   .. code-block:: bash
 
       pip install fava_tax_payment
 
 3. Add the extension to your Beancount file:
 
+   .. code-block:: beancount
+
       option "fava_extension" "fava_tax_payment"
 
 4. Restart Fava to load the extension.
 
-
 Requirements
-============
+------------
 
-* Python 3.9+
-
-* Fava 1.23+ (or compatible version)
-
-* Beancount 2.3+
+- Python 3.9+
+- Fava 1.23+ (or compatible version)
+- Beancount 2.3+

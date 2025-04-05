@@ -1,33 +1,36 @@
 Usage
 *****
 
-
-Tagging Transactions
-====================
-
-The extension identifies tax transactions in two ways:
-
-1. Via transaction metadata:
-
-   2023-04-15 * "Monthly Tax Payment"
-       Expenses:Taxes:Income  1000.00 RSD
-           tax_type: "income"
-       Assets:Bank:Checking
-
-2. Via transaction narration matching tax type name:
-
-   2023-04-15 * "income"
-       Expenses:Taxes:Income  1000.00 RSD
-       Assets:Bank:Checking
+Once configured, generating tax payment PDFs is straightforward.
 
 
 Generating PDFs
 ===============
 
-1. Open your Fava interface
+1. Tag your Beancount transactions with appropriate tax tags (e.g.,
+   "tax:income_tax").
 
-2. Navigate to the “Tax Payment PDFs” section in the sidebar
+2. Go to the "Tax Payment PDFs" page in Fava.
 
-3. Click “Generate PDFs” button
+3. Click "Generate PDFs" to create payment slips for all tagged
+   transactions.
 
-4. PDFs will be created in your working directory
+4. Download the generated PDFs.
+
+
+Example Transaction
+===================
+
+   2025-04-01 * "Tax Payment" "Income Tax Q1"
+     tag: tax:income_tax
+     Expenses:Taxes                1000.00 RSD
+     Assets:Bank                  -1000.00 RSD
+
+
+Tips
+====
+
+* Use consistent tax tags to match your configuration.
+
+* Check the "result" section on the page for generation status or
+  errors.

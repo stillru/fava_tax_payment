@@ -1,0 +1,38 @@
+API
+===
+
+The extension exposes a simple API for advanced users or developers.
+
+Modules
+-------
+
+.. automodule:: fava_tax_payment
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: fava_tax_payment.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Endpoints
+---------
+
+- **GET /extension/TaxPaymentExtension/**: Displays the configuration and generation UI.
+- **POST /extension/TaxPaymentExtension/generate_tax_pdfs**: Generates PDFs for tagged transactions.
+- **POST /extension/TaxPaymentExtension/save_config**: Saves the configuration JSON.
+
+Example Request
+---------------
+
+.. code-block:: bash
+
+   curl -X POST -H "Content-Type: application/json" \
+        -d '{"payer": {"name": "John Doe"}}' \
+        http://localhost:5000/extension/TaxPaymentExtension/save_config
+
+Development
+-----------
+
+The extension is built with Flask and integrates with Fava's extension system. Contributions are welcome — see the GitHub repo for details.
