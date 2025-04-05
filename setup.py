@@ -8,9 +8,9 @@ setup(
     description="A Fava extension for generating tax payment PDFs",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/stillru/fava-tax-payment",  # Опционально, если будет репозиторий
+    url="https://github.com/stillru/fava-tax-payment",
     packages=find_packages(),
-    include_package_data=True,  # Включаем файлы из MANIFEST.in
+    include_package_data=True,
     install_requires=[
         "fava>=1.30.2",
         "PyPDF2>=3.0.0",
