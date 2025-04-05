@@ -10,10 +10,12 @@ from fava.ext import extension_endpoint
 import importlib.resources as resources
 import shutil
 
+
 class TaxPaymentExtension(FavaExtensionBase):
     """
     A Fava extension for generating tax payment PDFs and managing tax configurations.
     """
+
     report_title = "Tax Payment PDFs"
 
     def __init__(self, *args, **kwargs):
@@ -26,7 +28,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         """
         super().__init__(*args, **kwargs)
         print("Initializing TaxPaymentExtension with args:", args, "kwargs:", kwargs)
-        
+
         package = "fava_tax_payment"
         extension_dir = os.getcwd()
         print(f"Using directory: {extension_dir}")
@@ -37,7 +39,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
             print(f"Created config directory: {config_dir}")
-        
+
         if not os.path.exists(self.local_config_path):
             with resources.path(package, "tax_config.json") as package_config_path:
                 shutil.copy(str(package_config_path), self.local_config_path)
@@ -76,15 +78,14 @@ class TaxPaymentExtension(FavaExtensionBase):
             if isinstance(self.jinja_env.loader, ChoiceLoader):
                 self.jinja_env.loader.loaders.append(FileSystemLoader(template_dir))
             else:
-                self.jinja_env.loader = ChoiceLoader([
-                    self.jinja_env.loader,
-                    FileSystemLoader(template_dir)
-                ])
+                self.jinja_env.loader = ChoiceLoader(
+                    [self.jinja_env.loader, FileSystemLoader(template_dir)]
+                )
             print(f"Jinja template directory: {template_dir}")
         except Exception as e:
             print(f"Error setting Jinja template directory: {e}")
             raise
-        
+
         self.payer_name = self.tax_config["payer"]["name"]
         self.payer_account = self.tax_config["payer"]["account"]
         self.expense_category = self.tax_config["expense_category"]
@@ -110,7 +111,9 @@ class TaxPaymentExtension(FavaExtensionBase):
         elif isinstance(config, (str, int, float, bool)) or config is None:
             return config
         else:
-            print(f"Warning: Unsupported type {type(config)} in config, converting to string")
+            print(
+                f"Warning: Unsupported type {type(config)} in config, converting to string"
+            )
             return str(config)
 
     def get_expense_accounts(self):
@@ -121,7 +124,9 @@ class TaxPaymentExtension(FavaExtensionBase):
             list: A list of expense accounts.
         """
         ledger = self.ledger
-        return [account for account in ledger.accounts if account.startswith("Expenses:")]
+        return [
+            account for account in ledger.accounts if account.startswith("Expenses:")
+        ]
 
     @extension_endpoint("save_config", ["POST"])
     def save_config(self):
@@ -169,7 +174,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         ledger = self.ledger
         extension_dir = os.getcwd()
         output_files = []
-        
+
         for entry in ledger.all_entries_by_type.Transaction:
             for posting in entry.postings:
                 if posting.account.startswith(self.expense_category):
@@ -185,7 +190,9 @@ class TaxPaymentExtension(FavaExtensionBase):
 
                     if tax_type and tax_type in self.tax_configs:
                         tax_data = self.tax_configs[tax_type]
-                        output_file = os.path.join(extension_dir, f"filled_{tax_type}_tax_{date}.pdf")
+                        output_file = os.path.join(
+                            extension_dir, f"filled_{tax_type}_tax_{date}.pdf"
+                        )
                         pdf_data = {
                             "payer": self.payer_name,
                             "purpose": tax_data["purpose"],
@@ -197,7 +204,7 @@ class TaxPaymentExtension(FavaExtensionBase):
                             "model": tax_data["model"],
                             "reference_number": tax_data["reference_number"],
                             "date": date,
-                            "currency_date": date
+                            "currency_date": date,
                         }
                         self.fill_pdf_form(output_file, pdf_data)
                         output_files.append(output_file)
@@ -231,8 +238,8 @@ class TaxPaymentExtension(FavaExtensionBase):
                 "Datum": data["date"],
                 "PechatIPodpis": "",
                 "PozivNaBroj": data["reference_number"],
-                "DatumValute": data["currency_date"]
-            }
+                "DatumValute": data["currency_date"],
+            },
         )
         with open(output_path, "wb") as output_file:
             writer.write(output_file)

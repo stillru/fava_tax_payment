@@ -23,9 +23,9 @@ setup(
     ],
     python_requires=">=3.10",
     extras_require={
-    'docs': [
-        'sphinx>=4.0.0',
-        'sphinx-rtd-theme',
-    ],
-},
+        "docs": [
+            "sphinx>=4.0.0",
+            "sphinx-rtd-theme",
+        ],
+    },
 )
