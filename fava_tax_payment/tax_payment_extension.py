@@ -2,7 +2,7 @@ from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, request
+from flask import jsonify, logging, request
 import json
 import os
 from jinja2 import FileSystemLoader, ChoiceLoader
@@ -27,32 +27,33 @@ class TaxPaymentExtension(FavaExtensionBase):
         - Loads the PDF template for generating tax payment slips.
         """
         super().__init__(*args, **kwargs)
-        print("Initializing TaxPaymentExtension with args:", args, "kwargs:", kwargs)
+        self.app = app
 
+        self.app.logger.info("Initializing TaxPaymentExtension with args: %s, kwargs: %s", args, kwargs)
         package = "fava_tax_payment"
         extension_dir = os.getcwd()
-        print(f"Using directory: {extension_dir}")
+        self.app.logger.info(f"Using directory: {extension_dir}")
         self.expense_accounts = self.get_expense_accounts()
         config_dir = os.path.join(extension_dir, "config")
         self.local_config_path = os.path.join(config_dir, "tax_config.json")
 
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
-            print(f"Created config directory: {config_dir}")
+            self.app.logger.info(f"Created config directory: {config_dir}")
 
         if not os.path.exists(self.local_config_path):
             with resources.path(package, "tax_config.json") as package_config_path:
                 shutil.copy(str(package_config_path), self.local_config_path)
-            print(f"Copied default tax_config.json to {self.local_config_path}")
+            self.app.logger.info(f"Copied default tax_config.json to {self.local_config_path}")
         else:
-            print(f"Using existing tax_config.json at {self.local_config_path}")
+            self.app.logger.info(f"Using existing tax_config.json at {self.local_config_path}")
 
         try:
             with open(self.local_config_path, "r", encoding="utf-8") as f:
                 self.tax_config = json.load(f)
-            print("Loaded tax_config.json successfully:", self.tax_config)
+            self.app.logger.info("Loaded tax_config.json successfully:", self.tax_config)
         except Exception as e:
-            print(f"Error loading tax_config.json: {e}")
+            self.app.logger.error(f"Error loading tax_config.json: {e}")
             raise
 
         if not isinstance(self.tax_config, dict):
@@ -67,9 +68,9 @@ class TaxPaymentExtension(FavaExtensionBase):
         try:
             with resources.path(package, "template.pdf") as template_path:
                 self.template_path = str(template_path)
-            print(f"Template path: {self.template_path}")
+            self.app.logger.info(f"Template path: {self.template_path}")
         except Exception as e:
-            print(f"Error accessing template.pdf: {e}")
+            self.app.logger.error(f"Error accessing template.pdf: {e}")
             raise
 
         try:
@@ -81,16 +82,15 @@ class TaxPaymentExtension(FavaExtensionBase):
                 self.jinja_env.loader = ChoiceLoader(
                     [self.jinja_env.loader, FileSystemLoader(template_dir)]
                 )
-            print(f"Jinja template directory: {template_dir}")
+            self.app.logger.info(f"Jinja template directory: {template_dir}")
         except Exception as e:
-            print(f"Error setting Jinja template directory: {e}")
+            self.app.logger.error(f"Error setting Jinja template directory: {e}")
             raise
 
         self.payer_name = self.tax_config["payer"]["name"]
         self.payer_account = self.tax_config["payer"]["account"]
         self.expense_category = self.tax_config["expense_category"]
         self.tax_configs = self.tax_config["taxes"]
-        self.app = app
 
     def _sanitize_config(self, config):
         """
@@ -111,7 +111,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         elif isinstance(config, (str, int, float, bool)) or config is None:
             return config
         else:
-            print(
+            logger.warning(
                 f"Warning: Unsupported type {type(config)} in config, \
                 converting to string"
             )
@@ -182,7 +182,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         # Create the output directory if it doesn't exist
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-            print(f"Created output directory: {output_dir}")
+            self.app.logger.info(f"Created output directory: {output_dir}")
 
         for entry in ledger.all_entries_by_type.Transaction:
             for posting in entry.postings:
@@ -217,7 +217,7 @@ class TaxPaymentExtension(FavaExtensionBase):
                         }
                         self.fill_pdf_form(output_file, pdf_data)
                         output_files.append(output_file)
-                        print(f"Generated: {output_file}")
+                        self.app.logger.info(f"Generated: {output_file}")
         return output_files
 
     def fill_pdf_form(self, output_path, data):
@@ -228,7 +228,7 @@ class TaxPaymentExtension(FavaExtensionBase):
             output_path (str): The path to save the filled PDF.
             data (dict): The data to populate the PDF form.
         """
-        print(f"Filling PDF: {output_path} with data: {data}")
+        self.app.logger.info(f"Filling PDF: {output_path} with data: {data}")
         reader = PdfReader(self.template_path)
         writer = PdfWriter()
         for page in reader.pages:
