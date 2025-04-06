@@ -154,7 +154,7 @@ class TaxPaymentExtension(FavaExtensionBase):
             self.payer_account = new_config["payer"]["account"]
             self.expense_category = new_config["expense_category"]
             self.tax_configs = new_config["taxes"]
-            print(f"Saved updated config to {self.local_config_path}")
+            self.app.logger.info(f"Saved updated config to {self.local_config_path}")
             return jsonify({"status": "success", "message": "Configuration saved"})
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
