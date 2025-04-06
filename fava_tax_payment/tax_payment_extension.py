@@ -42,18 +42,18 @@ class TaxPaymentExtension(FavaExtensionBase):
             self.app.logger.info(f"Created config directory: {config_dir}")
 
         if not os.path.exists(self.local_config_path):
-            with resources.path(package, "tax_config.json") as package_config_path:
+            with resources.path(f"{package}.Files", "tax_config.json") as package_config_path:
                 shutil.copy(str(package_config_path), self.local_config_path)
-            self.app.logger.info(f"Copied default tax_config.json to {self.local_config_path}")
+            self.app.logger.info("Copied default tax_config.json to %s", self.local_config_path)
         else:
-            self.app.logger.info(f"Using existing tax_config.json at {self.local_config_path}")
+            self.app.logger.info("Using existing tax_config.json at %s", self.local_config_path)
 
         try:
             with open(self.local_config_path, "r", encoding="utf-8") as f:
                 self.tax_config = json.load(f)
-            self.app.logger.info("Loaded tax_config.json successfully:", self.tax_config)
+            self.app.logger.info("Loaded tax_config.json successfully: %s", self.tax_config)
         except Exception as e:
-            self.app.logger.error(f"Error loading tax_config.json: {e}")
+            self.app.logger.error("Error loading tax_config.json: %s", e)
             raise
 
         if not isinstance(self.tax_config, dict):
@@ -66,15 +66,15 @@ class TaxPaymentExtension(FavaExtensionBase):
             self.tax_config["taxes"] = {}
 
         try:
-            with resources.path(package, "template.pdf") as template_path:
+            with resources.path(f"{package}.Files", "template.pdf") as template_path:
                 self.template_path = str(template_path)
-            self.app.logger.info(f"Template path: {self.template_path}")
+            self.app.logger.info("Template path: %s", self.template_path)
         except Exception as e:
-            self.app.logger.error(f"Error accessing template.pdf: {e}")
+            self.app.logger.error("Error accessing template.pdf: %s", e)
             raise
 
         try:
-            with resources.path(package, "TaxPaymentExtension.html") as html_path:
+            with resources.path(f"{package}.Templates", "TaxPaymentExtension.html") as html_path:
                 template_dir = os.path.dirname(str(html_path))
             if isinstance(self.jinja_env.loader, ChoiceLoader):
                 self.jinja_env.loader.loaders.append(FileSystemLoader(template_dir))
@@ -82,9 +82,9 @@ class TaxPaymentExtension(FavaExtensionBase):
                 self.jinja_env.loader = ChoiceLoader(
                     [self.jinja_env.loader, FileSystemLoader(template_dir)]
                 )
-            self.app.logger.info(f"Jinja template directory: {template_dir}")
+            self.app.logger.info("Jinja template directory: %s", template_dir)
         except Exception as e:
-            self.app.logger.error(f"Error setting Jinja template directory: {e}")
+            self.app.logger.error("Error setting Jinja template directory: %s", e)
             raise
 
         self.payer_name = self.tax_config["payer"]["name"]
