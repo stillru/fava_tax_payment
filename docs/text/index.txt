@@ -54,6 +54,8 @@ Features
 
 * Automatically fills official payment form templates
 
+* Logging thue to the Fava log system
+
 
 Indices and tables
 ******************

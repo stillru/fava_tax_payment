@@ -24,6 +24,7 @@ Features
 - Customizable payment details through configuration
 - Simple web UI integration with Fava
 - Automatically fills official payment form templates
+- Logging thue to the Fava log system
 
 Indices and tables
 ==================

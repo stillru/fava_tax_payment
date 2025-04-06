@@ -9,6 +9,7 @@ A Fava extension that generates PDF tax payment slips directly from your Beancou
 - Customizable payment details through configuration
 - Simple web UI integration with Fava
 - Automatically fills official payment form templates
+- Logging thrue Fava logger
 
 ## Planned Features and Improvements
 
@@ -31,7 +32,7 @@ The following features and improvements are planned for future releases of the T
    - Add validation for `tax_data` to prevent `KeyError` during PDF generation.
 
 6. **Error Logging**
-   - Replace `print` statements with a proper logging framework for better error tracking in production.
+   - ~~Replace `print` statements with a proper logging framework for better error tracking in production~~.
 
 7. **Dependency Validation**
    - Add checks to ensure required libraries (e.g., `PyPDF2`, `Flask`) are installed and compatible.

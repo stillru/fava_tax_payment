@@ -2,7 +2,7 @@ from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, logging, request
+from flask import jsonify, request
 import json
 import os
 from jinja2 import FileSystemLoader, ChoiceLoader
