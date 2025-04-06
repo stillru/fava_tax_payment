@@ -43,7 +43,8 @@ clean:
 build: clean deps
 	python3 setup.py bdist_wheel
 	pip install --force-reinstall dist/*.whl  # Устанавливаем в текущее окружение
-	docker build -t fava-tax-payment .
+	docker build -t fava .
+	docker image tag fava:latest registry.homelab.local:5000/still/fava:latest
 
 # Run Docker container with default finance directory
 run:
@@ -55,4 +56,4 @@ run:
 # Run Docker container with custom finance directory
 run-custom:
 	@read -p "Enter path to finance directory: " dir; \
-	docker run -p 5000:5000 -v $$dir:/app fava-tax-payment
+	docker run -p 5000:5000 -v $$dir:/app fava

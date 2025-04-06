@@ -119,7 +119,7 @@ class TaxPaymentExtension(FavaExtensionBase):
         elif isinstance(config, (str, int, float, bool)) or config is None:
             return config
         else:
-            logger.warning(
+            self.app.logger.warning(
                 f"Warning: Unsupported type {type(config)} in config, \
                 converting to string"
             )
