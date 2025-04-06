@@ -92,6 +92,14 @@ class TaxPaymentExtension(FavaExtensionBase):
         self.expense_category = self.tax_config["expense_category"]
         self.tax_configs = self.tax_config["taxes"]
 
+    def after_load_file(self):
+        """
+        Run after a ledger file has been loaded.
+        """
+        self.app.logger.info("Ledger file loaded successfully.")
+        self.app.logger.info("Expense accounts: %s", self.expense_accounts)
+        self.app.logger.info("Tax configurations: %s", self.tax_configs)
+
     def _sanitize_config(self, config):
         """
         Sanitize the configuration by converting unsupported types to strings.

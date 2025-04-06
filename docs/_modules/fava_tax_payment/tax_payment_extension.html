@@ -167,6 +167,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">payer_account</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tax_config</span><span class="p">[</span><span class="s2">&quot;payer&quot;</span><span class="p">][</span><span class="s2">&quot;account&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">expense_category</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tax_config</span><span class="p">[</span><span class="s2">&quot;expense_category&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tax_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tax_config</span><span class="p">[</span><span class="s2">&quot;taxes&quot;</span><span class="p">]</span>
+<div class="viewcode-block" id="TaxPaymentExtension.after_load_file">
+<a class="viewcode-back" href="../../api.html#fava_tax_payment.TaxPaymentExtension.after_load_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">after_load_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run after a ledger file has been loaded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Ledger file loaded successfully.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Expense accounts: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">expense_accounts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Tax configurations: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tax_configs</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_sanitize_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

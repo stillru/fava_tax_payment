@@ -18,6 +18,10 @@ class fava_tax_payment.TaxPaymentExtension(*args, **kwargs)
 
       Name for a HTML report for this extension.
 
+   after_load_file()
+
+      Run after a ledger file has been loaded.
+
    get_expense_accounts()
 
       Get a list of expense accounts from the ledger.
