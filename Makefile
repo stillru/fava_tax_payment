@@ -47,7 +47,10 @@ build: clean deps
 
 # Run Docker container with default finance directory
 run:
-	docker run -p 5000:5000 -v $(FINANCE_DIR):/app fava-tax-payment
+	docker run -p 5000:5000 -v $(FINANCE_DIR):/bean \
+	-e BEANCOUNT_FILE=/bean/year2025.org \
+	fava-tax-payment
+
 
 # Run Docker container with custom finance directory
 run-custom:

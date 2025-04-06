@@ -173,8 +173,16 @@ class TaxPaymentExtension(FavaExtensionBase):
             list: A list of paths to the generated PDF files.
         """
         ledger = self.ledger
-        extension_dir = os.getcwd()
+        # Get the directory of the ledger file
+        ledger_dir = os.path.dirname(os.path.abspath(ledger.beancount_file_path))
+        # Define the output directory next to the ledger file
+        output_dir = os.path.join(ledger_dir, "tax_pdfs")
         output_files = []
+
+        # Create the output directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+            print(f"Created output directory: {output_dir}")
 
         for entry in ledger.all_entries_by_type.Transaction:
             for posting in entry.postings:
@@ -192,7 +200,7 @@ class TaxPaymentExtension(FavaExtensionBase):
                     if tax_type and tax_type in self.tax_configs:
                         tax_data = self.tax_configs[tax_type]
                         output_file = os.path.join(
-                            extension_dir, f"filled_{tax_type}_tax_{date}.pdf"
+                            output_dir, f"filled_{tax_type}_tax_{date}.pdf"
                         )
                         pdf_data = {
                             "payer": self.payer_name,
