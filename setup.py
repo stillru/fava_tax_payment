@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="fava-tax-payment",
-    version="0.1.1",
+    version="0.1.2",
     author="Stepan Illichevskii",
     author_email="still.ru@gmail.com",
     description="A Fava extension for generating tax payment PDFs",

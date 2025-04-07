@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API &mdash; Fava Tax Payment Extension 0.1.1 documentation</title>
+  <title>API &mdash; Fava Tax Payment Extension 0.1.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=a58bc63e"></script>
+      <script src="_static/documentation_options.js?v=92734c54"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -50,7 +50,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-fava_tax_payment">Modules</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.report_title"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.report_title</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.after_load_file"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.after_load_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.has_js_module"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.has_js_module</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.get_expense_accounts"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.get_expense_accounts()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.save_config"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.save_config()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#fava_tax_payment.TaxPaymentExtension.generate_tax_pdfs"><code class="docutils literal notranslate"><span class="pre">TaxPaymentExtension.generate_tax_pdfs()</span></code></a></li>
@@ -106,10 +106,10 @@
 <dd><p>Name for a HTML report for this extension.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="fava_tax_payment.TaxPaymentExtension.after_load_file">
-<span class="sig-name descname"><span class="pre">after_load_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/fava_tax_payment/tax_payment_extension.html#TaxPaymentExtension.after_load_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#fava_tax_payment.TaxPaymentExtension.after_load_file" title="Link to this definition"></a></dt>
-<dd><p>Run after a ledger file has been loaded.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fava_tax_payment.TaxPaymentExtension.has_js_module">
+<span class="sig-name descname"><span class="pre">has_js_module</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#fava_tax_payment.TaxPaymentExtension.has_js_module" title="Link to this definition"></a></dt>
+<dd><p>Whether this extension includes a Javascript module.</p>
 </dd></dl>
 
 <dl class="py method">

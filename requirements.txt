@@ -1,9 +1,9 @@
-PyPDF2==3.0.1 --hash=sha256:d16e4205cfee272fbdc0568b68d82be796540b1537508cef59388f839c191928
-flask==3.0.3 --hash=sha256:34e815dfaa43340d1d15a5c3a02b8476004037eb4840b34910c6e21679d288f3
-jinja2==3.1.4 --hash=sha256:bc5dd2abb727a5319567b7a813e6a2e7318c39f4f487cfe6c89c6f9c7d25197d
-beancount-reds-plugins==0.3.0 --hash=sha256:4bf7d56a9d8084acb50591283cf1724eaa035c2f2df2ac70a3370b0d068da6ed
-fava-plugins==1.0 --hash=sha256:3668ccd1fdf3f744ef9e65c2972e1e6cf20ad34e6f25f86a1828fe7ce8fcf13b
+PyPDF2==3.0.1 
+flask==3.0.3
+jinja2==3.1.4
+beancount-reds-plugins==0.3.0
+fava-plugins==1.0
 
 # Manual specification of python-dateutil is a workaround for https://github.com/yegle/fava-docker/issues/39
-python-dateutil==2.8.2 --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
-beancount-periodic==0.1.2 --hash=sha256:352fc97be1ff17351d62273b00a41a1f454f3bc6b4b7e88d6d4b08854fe3a412
+python-dateutil==2.8.2
+beancount-periodic==0.1.2
