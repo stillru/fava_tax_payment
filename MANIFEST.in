@@ -1,3 +1,4 @@
 include fava_tax_payment/Files/tax_config.json
 include fava_tax_payment/Files/template.pdf
-include fava_tax_payment/Templates/TaxPaymentExtension.html
+include fava_tax_payment/templates/tax_payment_report.html
+include fava_tax_payment/TaxPaymentExtension.js

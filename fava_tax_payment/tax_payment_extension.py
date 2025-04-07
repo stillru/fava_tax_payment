@@ -2,7 +2,7 @@ from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, request
+from flask import jsonify, render_template, request
 import json
 import os
 from jinja2 import FileSystemLoader, ChoiceLoader
@@ -17,6 +17,7 @@ class TaxPaymentExtension(FavaExtensionBase):
     """
 
     report_title = "Tax Payment PDFs"
+    has_js_module = True
 
     def __init__(self, *args, **kwargs):
         """
@@ -75,32 +76,37 @@ class TaxPaymentExtension(FavaExtensionBase):
             self.app.logger.error("Error accessing template.pdf: %s", e)
             raise
 
-        try:
-            with resources.path(f"{package}.Templates", "TaxPaymentExtension.html") as html_path:
-                template_dir = os.path.dirname(str(html_path))
-            if isinstance(self.jinja_env.loader, ChoiceLoader):
-                self.jinja_env.loader.loaders.append(FileSystemLoader(template_dir))
-            else:
-                self.jinja_env.loader = ChoiceLoader(
-                    [self.jinja_env.loader, FileSystemLoader(template_dir)]
-                )
-            self.app.logger.info("Jinja template directory: %s", template_dir)
-        except Exception as e:
-            self.app.logger.error("Error setting Jinja template directory: %s", e)
-            raise
-
         self.payer_name = self.tax_config["payer"]["name"]
         self.payer_account = self.tax_config["payer"]["account"]
         self.expense_category = self.tax_config["expense_category"]
         self.tax_configs = self.tax_config["taxes"]
 
-    def after_load_file(self):
-        """
-        Run after a ledger file has been loaded.
-        """
-        self.app.logger.info("Ledger file loaded successfully.")
-        self.app.logger.info("Expense accounts: %s", self.expense_accounts)
-        self.app.logger.info("Tax configurations: %s", self.tax_configs)
+        # self.app.add_url_rule(
+        #     "/extension/TaxPaymentExtension/",
+        #     "tax_payment_report",
+        #     self.tax_payment_report
+        # )
+
+    # def tax_payment_report(self):
+    #     """
+    #     Render the tax payment report page.
+    #     """
+    #     self.app.logger.info("Rendering tax_payment_report.html")
+    #     result = render_template("tax_payment_report.html",
+    #         extension=self,
+    #         expense_accounts=self.expense_accounts,
+    #         tax_config=self.tax_config
+    #     )
+    #     self.app.logger.info("Rendered HTML (first 500 chars): %s", result[:500])
+    #     return result
+
+    # def after_load_file(self):
+    #     """
+    #     Run after a ledger file has been loaded.
+    #     """
+    #     self.app.logger.info("Ledger file loaded successfully.")
+    #     self.app.logger.info("Expense accounts: %s", self.expense_accounts)
+    #     self.app.logger.info("Tax configurations: %s", self.tax_configs)
 
     def _sanitize_config(self, config):
         """

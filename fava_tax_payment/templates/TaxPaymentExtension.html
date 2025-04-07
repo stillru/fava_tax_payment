@@ -1,0 +1,152 @@
+{% block title %}Tax Payment PDFs{% endblock %}
+{% block content %}
+<style>
+  .form-section {
+    margin-bottom: 1.5rem;
+  }
+  .flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    align-items: center;
+  }
+  .input-field {
+    flex: 1;
+    min-width: 120px;
+    max-width: 100%;
+  }
+  .input-field label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+  .input-field input,
+  .input-field select {
+    width: 100%;
+    padding: 6px 10px;
+    border: 1px solid var(--border-darker);
+    background-color: var(--background);
+    color: var(--text-color);
+  }
+  .tax-entry {
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--background-darker);
+    max-width: 100%;
+  }
+  button {
+    padding: 0.5em 0.75em;
+    background-color: var(--button-background);
+    color: var(--button-color);
+    border: none;
+    cursor: pointer;
+    transition: filter 0.2s ease-out;
+  }
+  button:hover {
+    filter: brightness(90%);
+  }
+  .remove-tax {
+    background-color: var(--error);
+  }
+  @media (max-width: 767px) {
+    .input-field {
+      min-width: 100%;
+    }
+    .tax-entry {
+      padding: 0.25rem;
+    }
+  }
+</style>
+<h2>Generate PDFs</h2>
+<p>Click the button below to generate PDF payment slips for tax transactions.</p>
+<button id="generate-pdfs">Generate PDFs</button>
+<div id="result"></div>
+
+<h2>Edit Configuration</h2>
+<form id="config-form">
+  <div class="form-section">
+    <h3>Payer</h3>
+    <div class="flex-row">
+      <div class="input-field">
+        <label for="payer-name">Name:</label>
+        <input type="text" id="payer-name" name="payer_name" value="{{ extension.tax_config.payer.name }}">
+      </div>
+      <div class="input-field">
+        <label for="payer-account">Account:</label>
+        <input type="text" id="payer-account" name="payer_account" value="{{ extension.tax_config.payer.account }}">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Expense Category</h3>
+    <div class="flex-row">
+      <div class="input-field">
+        <label for="expense-category">Category:</label>
+        <select id="expense-category" name="expense_category">
+          {% for account in extension.expense_accounts %}
+            <option value="{{ account }}" {% if account == extension.tax_config.expense_category %}selected{% endif %}>
+              {{ account }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <h3>Taxes</h3>
+    <div id="taxes-container">
+      {% for tax_name, tax_data in extension.tax_config.taxes.items() %}
+        <div class="tax-entry" data-tax-name="{{ tax_name }}">
+          <div class="flex-row">
+            <div class="input-field">
+              <label>Tax Slug:</label>
+              <input type="text" name="tax_name" value="{{ tax_name }}" class="tax-name">
+            </div>
+            <div class="input-field">
+              <label>Purpose:</label>
+              <input type="text" name="purpose" value="{{ tax_data.purpose }}">
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="input-field">
+              <label>Payment Code:</label>
+              <input type="text" name="payment_code" value="{{ tax_data.payment_code }}">
+            </div>
+            <div class="input-field">
+              <label>Recipient:</label>
+              <input type="text" name="recipient" value="{{ tax_data.recipient }}">
+            </div>
+          </div>
+          <div class="flex-row">
+            <div class="input-field">
+              <label>Recipient Account:</label>
+              <input type="text" name="recipient_account" value="{{ tax_data.recipient_account }}">
+            </div>
+            <div class="input-field">
+              <label>Model:</label>
+              <input type="text" name="model" value="{{ tax_data.model }}">
+            </div>
+            <div class="input-field">
+              <label>Reference Number:</label>
+              <input type="text" name="reference_number" value="{{ tax_data.reference_number }}">
+            </div>
+          </div>
+          <div class="flex-row">
+            <button type="button" class="remove-tax">Remove Tax</button>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button type="button" id="add-tax">Add New Tax</button>
+  </div>
+
+  <div class="form-section">
+    <button type="submit" id="save-config">Save Configuration</button>
+  </div>
+</form>
+<div id="config-result"></div>
+{% endblock %}

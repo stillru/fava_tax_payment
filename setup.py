@@ -15,7 +15,8 @@ setup(
         "fava_tax_payment": [
             "Files/template.pdf",
             "Files/tax_config.json",
-            "Templates/TaxPaymentExtension.html",
+            "templates/TaxPaymentExtension.html",
+            "TaxPaymentExtension.js",
         ]
     },
     install_requires=[

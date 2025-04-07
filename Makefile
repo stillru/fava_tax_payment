@@ -45,7 +45,6 @@ build: clean deps
 	pip install --force-reinstall dist/*.whl  # Устанавливаем в текущее окружение
 	docker build -t fava .
 	docker image tag fava:latest registry.homelab.local:5000/still/fava:latest
-	docker push registry.homelab.local:5000/still/fava:latest
 	@echo "Docker image built and pushed to registry."
 	@echo "Run 'make run' to start the container with default finance directory."
 	@echo "Run 'make run-custom' to start the container with a custom finance directory."
@@ -67,11 +66,16 @@ build: clean deps
 	@echo "To view the Sphinx documentation, visit https://www.sphinx-doc.org/en/master/."
 	@echo "To view the Beancount documentation, visit https://beancount.github.io/."
 
+publish:
+	@echo "Publishing Docker image to registry..."
+	docker push registry.homelab.local:5000/still/fava:latest
+	@echo "Docker image published to registry."
+
 # Run Docker container with default finance directory
 run:
 	docker run -p 5000:5000 -v $(FINANCE_DIR):/bean \
 	-e BEANCOUNT_FILE=/bean/year2025.org \
-	fava-tax-payment
+	fava
 
 
 # Run Docker container with custom finance directory
