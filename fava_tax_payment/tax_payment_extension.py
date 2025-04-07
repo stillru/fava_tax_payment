@@ -31,10 +31,12 @@ class TaxPaymentExtension(FavaExtensionBase):
 
         self.app.logger.info("Initializing TaxPaymentExtension with args: %s, kwargs: %s", args, kwargs)
         package = "fava_tax_payment"
+        ledger = self.ledger
+        ledger_dir = os.path.dirname(os.path.abspath(ledger.beancount_file_path))
         extension_dir = os.getcwd()
         self.app.logger.info(f"Using directory: {extension_dir}")
         self.expense_accounts = self.get_expense_accounts()
-        config_dir = os.path.join(extension_dir, "config")
+        config_dir = os.path.join(ledger_dir, "config")
         self.local_config_path = os.path.join(config_dir, "tax_config.json")
 
         if not os.path.exists(config_dir):
