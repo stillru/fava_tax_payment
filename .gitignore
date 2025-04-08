@@ -6,3 +6,4 @@ dist
 Utils
 docsource
 *.doctree
+**/.doctrees
