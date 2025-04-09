@@ -6,7 +6,7 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = docsource
 DOCSBUILDDIR  = docs
 BUILDDIR      = .
-FINANCE_DIR   = $(shell pwd)/..
+FINANCE_DIR   = $(shell pwd)
 
 .PHONY: help clean clean_doc html md build run run-custom deps
 
@@ -73,7 +73,7 @@ publish:
 
 # Run Docker container with default finance directory
 run:
-	docker run -p 5000:5000 -v $(FINANCE_DIR):/bean \
+	docker run -p 5000:5000 -v /home/still/Projects/fava_tax_payment:/bean \
 	-e BEANCOUNT_FILE=/bean/year2025.org \
 	fava
 

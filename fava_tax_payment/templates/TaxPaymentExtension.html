@@ -59,11 +59,32 @@
     }
   }
 </style>
+
+{% set module = request.args.get('module') %}
+<div class="headerline">
+  {% for key, label in [('generate', _('Generate PDFs')),
+                        ('download', _('Download PDFs')),
+                        ('edit', _('Edit Configuration'))
+                        ] %}
+  <h3><b>{% if not (module == key) %}<a href="{{ url_for('extension_report', extension_name='TaxPaymentExtension', module=key) }}">{{ label }}</a>{% else %} {{ label }}{% endif %}</b></h3>
+  {% endfor %}
+</div>
+
+{% if (module == None) %}
+<i>
+This extension generates PDF payment slips for tax transactions. It allows you to configure the payer's information, expense category, and tax details. You can generate and download the PDFs directly from this interface.
+</i>
+<p>To get started, select one of the options above.</p>
+{% endif %}
+
+{% if (module == 'generate') %}
 <h2>Generate PDFs</h2>
 <p>Click the button below to generate PDF payment slips for tax transactions.</p>
 <button id="generate-pdfs">Generate PDFs</button>
 <div id="result"></div>
+{% endif %}
 
+{% if (module == 'edit') %}
 <h2>Edit Configuration</h2>
 <form id="config-form">
   <div class="form-section">
@@ -149,4 +170,21 @@
   </div>
 </form>
 <div id="config-result"></div>
+{% endif %}
+
+{% if (module == 'download') %}
+{% set files = extension.list_docs() %}
+<h2>Download PDFs</h2>
+<i>Now saving files available only from "Save as..." context menu</i>
+<p>List of generated PDF files:</p>
+{% if files %}
+  {% for file in files %}
+    <div class="pdf-entry">
+      <a href="{{ url_for('extension_report', extension_name='TaxPaymentExtension') }}document?filename={{file}}" target="_blank">{{ file }}</a>
+    </div>
+  {% endfor %}
+{% else %}
+  <p>No PDF files available for download.</p>
+{% endif %}
+{% endif %}
 {% endblock %}

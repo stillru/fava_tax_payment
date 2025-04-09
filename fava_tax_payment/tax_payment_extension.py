@@ -1,8 +1,9 @@
 from decimal import Decimal
 from fava.ext import FavaExtensionBase
 from fava.application import app
+from fava.context import g
 from PyPDF2 import PdfReader, PdfWriter
-from flask import jsonify, request
+from flask import current_app, jsonify, render_template, request, send_from_directory
 import json
 import os
 from fava.ext import extension_endpoint
@@ -105,33 +106,6 @@ class TaxPaymentExtension(FavaExtensionBase):
         self.expense_category = self.tax_config["expense_category"]
         self.tax_configs = self.tax_config["taxes"]
 
-        # self.app.add_url_rule(
-        #     "/extension/TaxPaymentExtension/",
-        #     "tax_payment_report",
-        #     self.tax_payment_report
-        # )
-
-    # def tax_payment_report(self):
-    #     """
-    #     Render the tax payment report page.
-    #     """
-    #     self.app.logger.info("Rendering tax_payment_report.html")
-    #     result = render_template("tax_payment_report.html",
-    #         extension=self,
-    #         expense_accounts=self.expense_accounts,
-    #         tax_config=self.tax_config
-    #     )
-    #     self.app.logger.info("Rendered HTML (first 500 chars): %s", result[:500])
-    #     return result
-
-    # def after_load_file(self):
-    #     """
-    #     Run after a ledger file has been loaded.
-    #     """
-    #     self.app.logger.info("Ledger file loaded successfully.")
-    #     self.app.logger.info("Expense accounts: %s", self.expense_accounts)
-    #     self.app.logger.info("Tax configurations: %s", self.tax_configs)
-
     def _sanitize_config(self, config):
         """
         Sanitize the configuration by converting unsupported types to strings.
@@ -168,6 +142,50 @@ class TaxPaymentExtension(FavaExtensionBase):
         return [
             account for account in ledger.accounts if account.startswith("Expenses:")
         ]
+    
+    def list_docs(self):
+        ledger = self.ledger
+        ledger_dir = os.path.dirname(os.path.abspath(ledger.beancount_file_path))
+        output_dir = os.path.join(ledger_dir, "tax_pdfs")
+        files = [f for f in os.listdir(output_dir) if f.endswith('.pdf')]
+        
+        return files
+
+    @extension_endpoint("document", ["GET"])
+    def document(self):
+        """Serve a PDF file for download from the tax_pdfs directory."""
+        ledger_dir = os.path.dirname(os.path.abspath(self.ledger.beancount_file_path))
+        output_dir = os.path.join(ledger_dir, "tax_pdfs")
+        
+        # Get filename from query parameters
+        filename = request.args.get('filename')
+        self.app.logger.info(f"Requested file: {filename}")
+        
+        # Validate filename
+        if not filename:
+            self.app.logger.error("No filename provided in request")
+            return jsonify({"status": "error", "message": "No filename provided"}), 400
+        
+        if not filename.endswith('.pdf'):
+            self.app.logger.error(f"Invalid file type requested: {filename}")
+            return jsonify({"status": "error", "message": "Only PDF files are supported"}), 400
+        
+        # Prevent path traversal by using basename
+        safe_filename = os.path.basename(filename)
+        full_path = os.path.join(output_dir, safe_filename)
+        
+        if not os.path.exists(full_path):
+            self.app.logger.error(f"File not found: {full_path}")
+            return render_template("error.html", message="File not found"), 404
+        
+        self.app.logger.info(f"Serving file: {full_path}")
+        return send_from_directory(
+            output_dir,
+            safe_filename,
+            as_attachment=True,  # Set to True if you want to force download
+            mimetype="application/pdf",
+            download_name=safe_filename  # Ensures the filename is preserved in the download
+        )
 
     @extension_endpoint("save_config", ["POST"])
     def save_config(self):

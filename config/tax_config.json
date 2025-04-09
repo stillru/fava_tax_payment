@@ -1,0 +1,41 @@
+{
+    "payer": {
+      "name": "Stepan Illichevskii PR Beograd",
+      "account": "160-123456-78"
+    },
+    "expense_category": "Expenses:Taxes",
+    "taxes": {
+      "income": {
+        "purpose": "Porez na dohodak",
+        "recipient": "Poreska uprava Respublike Serbija",
+        "recipient_account": "840-123456-78",
+        "payment_code": "189",
+        "model": "97",
+        "reference_number": "123456789"
+      },
+      "healthcare": {
+        "purpose": "Porez za zdravstvo",
+        "recipient": "Poreska uprava Respublike Serbija",
+        "recipient_account": "840-234567-89",
+        "payment_code": "190",
+        "model": "97",
+        "reference_number": "987654321"
+      },
+      "fixed": {
+        "purpose": "Fiksna taksa",
+        "recipient": "Poreska uprava Respublike Serbija",
+        "recipient_account": "840-345678-90",
+        "payment_code": "191",
+        "model": "97",
+        "reference_number": "456789123"
+      },
+      "eco": {
+        "purpose": "Ekološki porez",
+        "recipient": "Poreska uprava Respublike Serbija",
+        "recipient_account": "840-456789-01",
+        "payment_code": "192",
+        "model": "97",
+        "reference_number": "321654987"
+      }
+    }
+  }

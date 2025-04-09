@@ -11,14 +11,6 @@ setup(
     url="https://github.com/stillru/fava_tax_payment",
     packages=find_packages(),
     include_package_data=True,
-    package_data={
-        "fava_tax_payment": [
-            "Files/template.pdf",
-            "Files/tax_config.json",
-            "templates/TaxPaymentExtension.html",
-            "TaxPaymentExtension.js",
-        ]
-    },
     install_requires=[
         "fava>=1.30.2",
         "PyPDF2>=3.0.0",
