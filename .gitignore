@@ -30,3 +30,4 @@ fava_tax_payment.code-workspace
 *.tar.lz4f
 *.tar.lz4c
 .changelog-config.yaml
+.*_importer.py

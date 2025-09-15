@@ -329,5 +329,11 @@ class TaxPaymentExtension(FavaExtensionBase):
                 "DatumValute": data["currency_date"],
             },
         )
-        with open(output_path, "wb") as output_file:
-            writer.write(output_file)
+        try:
+            with open(output_path, "wb") as output_file:
+                writer.write(output_file)
+            self.app.logger.info(f"Successfully wrote filled PDF to {output_path}")
+        except Exception as e:
+            self.app.logger.error(f"Error writing filled PDF: {e}")
+            raise
+        self.app.logger.info(f"Filled PDF saved to {output_path}")    
